@@ -32,6 +32,9 @@ SELECT T_NAME FROM TEAM WHERE LOWER(C_ABBREVIATION) LIKE '%s' ORDER BY T_SEED
 select T_NAME, T_SEED, T_WINS, T_LOSSES, (T_WINS / (T_WINS + T_LOSSES)) as WIN_PERCENTAGE 
 from TEAM  where C_ABBREVIATION LIKE '%s' ORDER BY T_SEED
 
+-- Get the stats of all the MVP candidates
+select P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR from PLAYER WHERE P_PTS >= 30;
+
 -- Extra queries for testing
 -- Get all players
 SELECT * FROM PLAYER;

@@ -84,7 +84,6 @@ def display_team_stats(event):
     stats_text.insert(END, x)
     stats_text.insert(END, "-" * 10 + "\n")
 
-
 # Function to search players by name
 def search_players():
     # Get the search term
@@ -180,18 +179,25 @@ frm.grid()
 ttk.Label(frm, text="Search").grid(column=0, row=0, padx=0, pady=0, sticky='w')
 search_entry = ttk.Entry(frm, width=18)
 search_entry.grid(column=0, row=0, padx=5, pady=5, sticky='e')
+
 #search for player button
 search_player_button = ttk.Button(frm, text="Search Player", command=search_players)
 search_player_button.grid(column=1, row=0, padx=5, pady=5, sticky='w')
+
 #search for team button
 search_team_button = ttk.Button(frm, text="Search Team", command=search_teams)
 search_team_button.grid(column=1, row=0, padx=5, pady=5, sticky='e')
+
 #search for conference button
 search_conference_button = ttk.Button(frm, text="Search Conference", command=search_conference)
 search_conference_button.grid(column=1, row=0, padx=5, pady=5, sticky='n')
-#search for mvp button
-search_mvp_button = ttk.Button(frm, text="Search MVP", command=search_mvp)
+
+#mvp button
+search_mvp_button = ttk.Button(frm, text="MVP", command=search_mvp)
 search_mvp_button.grid(column=0, row=3, padx=5, pady=5, sticky='e')
+
+# Bind the Search MVP button to the search_mvp function
+search_mvp_button.bind('<Button-1>', search_mvp)
 
 # Add a label for the Listbox
 ttk.Label(frm, text="NBA Players:").grid(column=0, row=1, padx=5, pady=5)
@@ -200,19 +206,16 @@ ttk.Label(frm, text="NBA Players:").grid(column=0, row=1, padx=5, pady=5)
 names_listbox = Listbox(frm, height=15, width=30)
 names_listbox.grid(column=0, row=1, padx=5, pady=5)
 
+# Bind the Listbox click event to the display_stats function
+names_listbox.bind('<<ListboxSelect>>', display_stats)
+
 # add a listbox for the teams
 ttk.Label(frm, text="NBA Teams:").grid(column=2, row=0, padx=5, pady=5, sticky='n')
 teams_listbox = Listbox(frm, height=15, width=30)
 teams_listbox.grid(column=2, row=1, padx=5, pady=5, sticky='s')
 
-# Bind the Listbox click event to the display_stats function
-names_listbox.bind('<<ListboxSelect>>', display_stats)
-
 # Bind the Listbox click event to the display_team_stats function
 teams_listbox.bind('<<ListboxSelect>>', display_team_stats)
-
-# Bind the Search MVP button to the search_mvp function
-search_mvp_button.bind('<Button-1>', search_mvp)
 
 # Add a Text widget to display the stats
 stats_text = Text(frm, height=20, width=95, wrap=WORD)
