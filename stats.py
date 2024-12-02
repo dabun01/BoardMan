@@ -151,6 +151,22 @@ def search_conference():
     stats_text.insert(END, x)
     stats_text.insert(END, "-" * 10 + "\n")
 
+# Function to search players by Point per game if the user types in MVP in the search bar it will display the top 5 players in the league
+def search_mvp():
+    search_query = "select P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR from PLAYER WHERE P_PTS >= 30;"
+    cursor.execute(search_query)
+    results = cursor.fetchall()
+
+    # Clear the stats display area
+    stats_text.delete('1.0', END)
+
+    # Display the stats in the text area
+    mvp = PrettyTable()
+    mvp.field_names = ["Number", "Name", "Points", "Rebounds", "Assists", "Field Goal %", "Team"]
+    for P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR in results:
+        mvp.add_row([P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR])
+    stats_text.insert(END, mvp)
+    stats_text.insert(END, "-" * 10 + "\n")
 
 # Create the main GUI window
 root = Tk()
@@ -173,6 +189,9 @@ search_team_button.grid(column=1, row=0, padx=5, pady=5, sticky='e')
 #search for conference button
 search_conference_button = ttk.Button(frm, text="Search Conference", command=search_conference)
 search_conference_button.grid(column=1, row=0, padx=5, pady=5, sticky='n')
+#search for mvp button
+search_mvp_button = ttk.Button(frm, text="Search MVP", command=search_mvp)
+search_mvp_button.grid(column=0, row=3, padx=5, pady=5, sticky='e')
 
 # Add a label for the Listbox
 ttk.Label(frm, text="NBA Players:").grid(column=0, row=1, padx=5, pady=5)
@@ -192,12 +211,15 @@ names_listbox.bind('<<ListboxSelect>>', display_stats)
 # Bind the Listbox click event to the display_team_stats function
 teams_listbox.bind('<<ListboxSelect>>', display_team_stats)
 
+# Bind the Search MVP button to the search_mvp function
+search_mvp_button.bind('<Button-1>', search_mvp)
+
 # Add a Text widget to display the stats
 stats_text = Text(frm, height=20, width=95, wrap=WORD)
 stats_text.grid(column=1, row=1, padx=3, pady=3)
 
 # Add a button to quit the application
-ttk.Button(frm, text="Quit", command=root.destroy).grid(column=0, row=3, padx=5, pady=5)
+ttk.Button(frm, text="Quit", command=root.destroy).grid(column=0, row=3, padx=5, pady=5, sticky='w')
 
 # Call the function to populate the Listbox with player names
 display_names()
