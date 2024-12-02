@@ -1,11 +1,11 @@
+password = "airpods4sale"
 import mysql.connector
 from tkinter import *
 from tkinter import ttk
 from prettytable import PrettyTable
 
-
 # Connect to the MySQL database
-cnx = mysql.connector.connect(user='root', password='airpods4sale', database='NBA')
+cnx = mysql.connector.connect(user='root', password = password, database='NBA')
 cursor = cnx.cursor()
 
 #function to display all the teams in the listbox
@@ -203,16 +203,16 @@ search_mvp_button.bind('<Button-1>', search_mvp)
 ttk.Label(frm, text="NBA Players:").grid(column=0, row=1, padx=5, pady=5)
 
 # Add a Listbox widget to display player names
-names_listbox = Listbox(frm, height=15, width=30)
+names_listbox = Listbox(frm, height=20, width=30)
 names_listbox.grid(column=0, row=1, padx=5, pady=5)
 
 # Bind the Listbox click event to the display_stats function
 names_listbox.bind('<<ListboxSelect>>', display_stats)
 
 # add a listbox for the teams
-ttk.Label(frm, text="NBA Teams:").grid(column=2, row=0, padx=5, pady=5, sticky='n')
-teams_listbox = Listbox(frm, height=15, width=30)
-teams_listbox.grid(column=2, row=1, padx=5, pady=5, sticky='s')
+ttk.Label(frm, text="NBA Teams:").grid(column=2, row=0, padx=5, pady=5)
+teams_listbox = Listbox(frm, height=20, width=30)
+teams_listbox.grid(column=2, row=1, padx=5, pady=5)
 
 # Bind the Listbox click event to the display_team_stats function
 teams_listbox.bind('<<ListboxSelect>>', display_team_stats)
