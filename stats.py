@@ -116,12 +116,12 @@ def search_teams():
     for (T_NAME,) in results:
         teams_listbox.insert(END, T_NAME)
 
-#Function where if in the search bar you type east or west it will display the teams in that conference in the left listbox
+#Function where if in the search bar you type east or west it will display the teams in that conference in the right listbox
 # And in the center textbox the standings of the teams in that conference 
 def search_conference():
     # Get the search term
     search_term = search_entry.get().strip().lower()
-
+    # Check if the search term is either 'east' or 'west'
     if search_term not in {"east", "west"}:
         stats_text.delete('1.0', END)  # Clear the stats display area before showing the error
         stats_text.insert(END, "Error: Please enter either 'East' or 'West'.")
