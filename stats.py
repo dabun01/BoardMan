@@ -82,7 +82,6 @@ def display_team_stats(event):
     for P_NUMBER, P_NAME, P_POSITION, P_PTS, P_AST, P_REB, P_FG, T_NAME in cursor.fetchall():
         x.add_row([P_NUMBER, P_NAME, P_POSITION, P_PTS, P_AST, P_REB, P_FG])
     stats_text.insert(END, x)
-    stats_text.insert(END, "-" * 10 + "\n")
 
 # Function to search players by name
 def search_players():
@@ -122,33 +121,41 @@ def search_teams():
 def search_conference():
     # Get the search term
     search_term = search_entry.get().strip().lower()
-    
-    # Query to search teams by conference name
-    search_conf_query = "SELECT T_NAME FROM TEAM WHERE LOWER(C_ABBREVIATION) LIKE %s ORDER BY T_SEED"
-    cursor.execute(search_conf_query, (f"%{search_term}%",))
-    results = cursor.fetchall()
-    
-    # Clear the Listbox
-    teams_listbox.delete(0, END)
-    
-    # Populate the Listbox with search results
-    for (T_NAME,) in results:
-        teams_listbox.insert(END, T_NAME)
-    
-    # Query to fetch stats for the selected team
-    stats_query = "select T_NAME, T_SEED, T_WINS, T_LOSSES, (T_WINS / (T_WINS + T_LOSSES)) as WIN_PERCENTAGE from TEAM  where C_ABBREVIATION LIKE %s ORDER BY T_SEED"
-    cursor.execute(stats_query, (search_term,))
-    stats = cursor.fetchall()
 
-    # Clear the stats display area
-    stats_text.delete('1.0', END)
-    # Display the conference standings in the text area
-    x = PrettyTable()
-    x.field_names = ["Team Name", "Seed", "Wins", "Losses", "Win%",]
-    for T_NAME, T_SEED, T_WINS, T_LOSSES, WIN_PERCENTAGE in stats:
-        x.add_row([T_NAME, T_SEED, T_WINS, T_LOSSES, WIN_PERCENTAGE])
-    stats_text.insert(END, x)
-    stats_text.insert(END, "-" * 10 + "\n")
+    if search_term not in {"east", "west"}:
+        stats_text.delete('1.0', END)  # Clear the stats display area before showing the error
+        stats_text.insert(END, "Error: Please enter either 'East' or 'West'.")
+    else:
+        try:
+            # Query to search teams by conference name
+            search_conf_query = "SELECT T_NAME FROM TEAM WHERE LOWER(C_ABBREVIATION) LIKE %s ORDER BY T_SEED"
+            cursor.execute(search_conf_query, (f"%{search_term}%",))
+            results = cursor.fetchall()
+
+            # Clear the Listbox
+            teams_listbox.delete(0, END)
+
+            # Populate the Listbox with search results
+            for (T_NAME,) in results:
+                teams_listbox.insert(END, T_NAME)
+
+            # Query to fetch stats for the selected team
+            stats_query = "select T_NAME, T_SEED, T_WINS, T_LOSSES, (T_WINS / (T_WINS + T_LOSSES)) as WIN_PERCENTAGE from TEAM  where C_ABBREVIATION LIKE %s ORDER BY T_SEED"
+            cursor.execute(stats_query, (search_term,))
+            stats = cursor.fetchall()
+
+            # Clear the stats display area
+            stats_text.delete('1.0', END)
+            # Display the conference standings in the text area
+            x = PrettyTable()
+            x.field_names = ["Team Name", "Seed", "Wins", "Losses", "Win%",]
+            for T_NAME, T_SEED, T_WINS, T_LOSSES, WIN_PERCENTAGE in stats:
+                x.add_row([T_NAME, T_SEED, T_WINS, T_LOSSES, WIN_PERCENTAGE])
+            stats_text.insert(END, x)
+        except Exception as e:
+            #Handle potential database errors
+            stats_text.delete('1.0', END)
+            stats_text.insert(END, f"Error fetching data: {e}")
 
 # Function to search players by Point per game if the user types in MVP in the search bar it will display the top 5 players in the league
 def search_mvp():
@@ -165,7 +172,6 @@ def search_mvp():
     for P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR in results:
         mvp.add_row([P_NUMBER, P_NAME, P_PTS, P_REB, P_AST, P_FG, P_TEAM_ABBR])
     stats_text.insert(END, mvp)
-    stats_text.insert(END, "-" * 10 + "\n")
 
 # Create the main GUI window
 root = Tk()
