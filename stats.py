@@ -1,4 +1,5 @@
-password = "./password.txt"
+password = "airpods4sale"
+import os
 import mysql.connector
 import tkinter as tk
 from tkinter import ttk
