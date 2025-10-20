@@ -1,6 +1,7 @@
 import mysql.connector
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
+from typing import Sequence, Mapping, Any 
 
 # Connect to the MySQL database
 cnx = mysql.connector.connect(user='root', password='airpods4sale', database='NBA')
@@ -12,12 +13,12 @@ cursor.execute(query)
 
 # Function to fetch and display player names in the GUI
 def display_names():
-    names = [name[0] for name in cursor.fetchall()]  # Fetch all names from the cursor
-    for name in names:
-        names_listbox.insert(END, name)  # Insert names into the Listbox widget
+    rows: Sequence[Mapping[str, Any]] = cursor.fetchall()  # pyright: ignore[reportAssignmentType] # changed
+    for row in rows:
+        names_listbox.insert(tk.END, row['P_NAME'])  # Insert names into the Listbox widget
 
 # Create the main GUI window
-root = Tk()
+root = tk.Tk()
 root.title("NBA Player Names")
 
 # Create and configure the main frame
@@ -28,7 +29,7 @@ frm.grid()
 ttk.Label(frm, text="NBA Player Names:").grid(column=0, row=0, padx=5, pady=5)
 
 # Add a Listbox widget to display names
-names_listbox = Listbox(frm, height=15, width=30)
+names_listbox = tk.Listbox(frm, height=15, width=30)
 names_listbox.grid(column=0, row=1, padx=5, pady=5)
 
 # Add a button to quit the application
