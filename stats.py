@@ -249,7 +249,7 @@ search_mvp_button = ttk.Button(frm, text="MVP", command=search_mvp)
 search_mvp_button.grid(column=0, row=3, padx=5, pady=5, sticky='e')
 
 # Bind the Search MVP button to the search_mvp function
-search_mvp_button.bind('<Button-1>', search_mvp)
+search_mvp_button.config(command=search_mvp)
 
 # Add a label for the Listbox
 ttk.Label(frm, text="NBA Players:").grid(column=0, row=1, padx=5, pady=5)
